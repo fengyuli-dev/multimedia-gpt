@@ -7,6 +7,8 @@ This project is made possible by a Prompt Manager and is inspired and built upon
 ## Models
 In addition to all of the vision foundation models mentioned in [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt), Multimedia GPT supports [OpenAI Whisper](https://openai.com/research/whisper), [OpenAI DALLE](https://openai.com/blog/dall-e-api-now-available-in-public-beta), and many more is under development! This means that **you no longer need your own GPUs for voice recognition and image generation** (although you still can!)
 
+The base chat model can be configured as GPT-4, GPT-3.5 (ChatGPT), and GPT-3.
+
 ## Demo 
 ![](./public/demo-1.jpg)
 ![](./public/demo-2.jpg)
