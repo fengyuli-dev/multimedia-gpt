@@ -10,6 +10,8 @@ In addition to all of the vision foundation models mentioned in [Microsoft Visua
 The base chat model can be configured as GPT-4, GPT-3.5 (ChatGPT), and GPT-3.
 
 ## Demo 
+In this demo, ChatGPT is fed with a recording of [a person telling the story of Cinderella](public/cinderella.mp3).
+
 ![](./public/demo-1.jpg)
 ![](./public/demo-2.jpg)
 
