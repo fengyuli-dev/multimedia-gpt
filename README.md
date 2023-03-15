@@ -4,6 +4,9 @@ Multimedia GPT connects your OpenAI GPT with vision and audio. You can now send 
 
 This project is made possible by a Prompt Manager and is inspired and built upon [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt). 
 
+## Models
+In addition to all of the vision foundation models mentioned in [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt), Multimedia GPT supports [OpenAI Whisper](https://openai.com/research/whisper), [OpenAI DALLE](https://openai.com/blog/dall-e-api-now-available-in-public-beta), and many more is under development! This means that **you no longer need your own GPUs for voice recognition and image generation** (although you still can!)
+
 ## Demo 
 ![](./public/demo-1.jpg)
 ![](./public/demo-2.jpg)
