@@ -172,7 +172,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     load_dict = {e.split('_')[0].strip(): e.split('_')[1].strip() for e in args.load.split(',')}
     bot = ConversationBot(load_dict=load_dict)
-    with gr.Blocks(css="#chatbot .overflow-y-auto{height:500px}") as demo:
+    with gr.Blocks(css="#chatbot .gradio-container") as demo:
         chatbot = gr.Chatbot(elem_id="chatbot", label="Multimedia GPT")
         state = gr.State([])
         with gr.Row():

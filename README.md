@@ -4,6 +4,11 @@ Multimedia GPT connects your OpenAI GPT with vision and audio. You can now send 
 
 This project is made possible by a Prompt Manager and is inspired and built upon [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt). 
 
+## Demo 
+![](./public/demo-1.jpg)
+![](./public/demo-2.jpg)
+
+
 ## Installation
 
 ```bash
@@ -17,9 +22,9 @@ conda activate multimedia-gptt
 pip install -r requirements.txt
 
 # prepare your private OpenAI key (for Linux)
-export OPENAI_API_KEY={Your_Private_Openai_Key}
+echo "export OPENAI_API_KEY='yourkey'" >> ~/.zshrc
 # prepare your private OpenAI key (for Windows)
-set OPENAI_API_KEY={Your_Private_Openai_Key}
+setx OPENAI_API_KEY “<yourkey>”
 
 # Start Multimedia GPT !
 # You can specify the GPU/CPU assignment by "--load", the parameter indicates which 
@@ -30,6 +35,5 @@ set OPENAI_API_KEY={Your_Private_Openai_Key}
 # You can use: "ImageCaptioning_cpu,Text2Image_cuda:0"
 
 # Don't have GPUs? No worry, you can run DALLE and Whisper using your API key!
-python visual_chatgpt.py --load ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu
-                             
+python visual_chatgpt.py --load ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu                     
 ```
