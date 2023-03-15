@@ -35,5 +35,5 @@ setx OPENAI_API_KEY “<yourkey>”
 # You can use: "ImageCaptioning_cpu,Text2Image_cuda:0"
 
 # Don't have GPUs? No worry, you can run DALLE and Whisper using your API key!
-python visual_chatgpt.py --load ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu                     
+python multimedia_gpt.py --load ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu                     
 ```
