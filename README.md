@@ -1,2 +1,35 @@
-# multimedia-gpt
-GPT beyond just text.
+# Multimedia GPT
+
+Multimedia GPT connects your OpenAI GPT with vision and audio. You can now send images, videos (in development), and even audio recordings using your OpenAI API Key, and get a response in both text and image formats. 
+
+This project is made possible by a Prompt Manager and is inspired and built upon [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt). 
+
+## Installation
+
+```bash
+# Clone this repository
+git clone https://github.com/fengyuli2002/multimedia-gpt
+cd multimedia-gpt
+
+# Prepare a conda environment
+conda create -n multimedia-gpt python=3.8
+conda activate multimedia-gptt
+pip install -r requirements.txt
+
+# prepare your private OpenAI key (for Linux)
+export OPENAI_API_KEY={Your_Private_Openai_Key}
+# prepare your private OpenAI key (for Windows)
+set OPENAI_API_KEY={Your_Private_Openai_Key}
+
+# Start Multimedia GPT !
+# You can specify the GPU/CPU assignment by "--load", the parameter indicates which 
+# foundation models to use and where it will be loaded to
+# The model and device are separated by underline '_', the different models are separated by comma ','
+# The available Visual Foundation Models can be found in the following table
+# For example, if you want to load ImageCaptioning to cpu and Text2Image to cuda:0
+# You can use: "ImageCaptioning_cpu,Text2Image_cuda:0"
+
+# Don't have GPUs? No worry, you can run DALLE and Whisper using your API key!
+python visual_chatgpt.py --load ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu
+                             
+```
