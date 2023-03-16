@@ -44,3 +44,9 @@ setx OPENAI_API_KEY “<yourkey>”
 # Don't have GPUs? No worry, you can run DALLE and Whisper using your API key!
 python multimedia_gpt.py --load ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu                     
 ```
+
+## Plans
+- [x] Support OpenAI Whisper for speech recognition
+- [x] Support OpenAI DALLE for image generation
+- [ ] Support OpenAI DALLE for image editing
+- [ ] Deploy a GPU-free basic version for interactive demo

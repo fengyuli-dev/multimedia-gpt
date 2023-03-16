@@ -54,6 +54,11 @@ class DALLE:
         print(f"\nProcessed DALLE, Input Text: {instruct_text}, "
                f"Output Text: {updated_image_path}") 
         return updated_image_path
+    
+
+class DALLE_EDITING:
+    pass
+
 
 class Whisper:
     def __init__(self, device):
