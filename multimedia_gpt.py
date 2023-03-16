@@ -16,7 +16,7 @@ from PIL import Image
 from models import *
 from utils import *
 
-openai.api_key = os.environ['OPENAI_API_KEY']
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 # TODO: adapt this prompt template for video and audio
 PROMPT_PREFIX = """Multimedia GPT is designed to be able to assist with a wide range of text, visual, and audio related tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. Multimedia GPT is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
@@ -63,19 +63,24 @@ Since Multimedia GPT is a text language model, Multimedia GPT must use tools to 
 The thoughts and observations are only visible for Multimedia GPT, Multimedia GPT should remember to repeat important information in the final response for Human. 
 Thought: Do I need to use a tool? {agent_scratchpad}"""
 
-os.makedirs('image', exist_ok=True)
-os.makedirs('audio', exist_ok=True)
-os.makedirs('video', exist_ok=True)
+os.makedirs("image", exist_ok=True)
+os.makedirs("audio", exist_ok=True)
+os.makedirs("video", exist_ok=True)
+
 
 class ConversationBot:
     def __init__(self, load_dict):
         # load_dict = {'VisualQuestionAnswering':'cuda:0', 'ImageCaptioning':'cuda:1', ...}
         print(f"Initializing VisualChatGPT, load_dict={load_dict}")
-        if 'ImageCaptioning' not in load_dict:
-            raise ValueError("You have to load ImageCaptioning as a basic function for VisualChatGPT")
+        if "ImageCaptioning" not in load_dict:
+            raise ValueError(
+                "You have to load ImageCaptioning as a basic function for VisualChatGPT"
+            )
 
         self.llm = OpenAI(temperature=0, openai_api_key=openai.api_key)
-        self.memory = ConversationBufferMemory(memory_key="chat_history", output_key='output')
+        self.memory = ConversationBufferMemory(
+            memory_key="chat_history", output_key="output"
+        )
 
         self.models = dict()
         for class_name, device in load_dict.items():
@@ -84,9 +89,11 @@ class ConversationBot:
         self.tools = []
         for class_name, instance in self.models.items():
             for e in dir(instance):
-                if e.startswith('inference'):
+                if e.startswith("inference"):
                     func = getattr(instance, e)
-                    self.tools.append(Tool(name=func.name, description=func.description, func=func))
+                    self.tools.append(
+                        Tool(name=func.name, description=func.description, func=func)
+                    )
 
         self.agent = initialize_agent(
             self.tools,
@@ -95,21 +102,33 @@ class ConversationBot:
             verbose=True,
             memory=self.memory,
             return_intermediate_steps=True,
-            agent_kwargs={'prefix': PROMPT_PREFIX, 'format_instructions': FORMAT_INSTRUCTIONS,
-                          'suffix': PROMPT_SUFFIX}, )
+            agent_kwargs={
+                "prefix": PROMPT_PREFIX,
+                "format_instructions": FORMAT_INSTRUCTIONS,
+                "suffix": PROMPT_SUFFIX,
+            },
+        )
 
     def run_text(self, text, state):
-        self.agent.memory.buffer = cut_dialogue_history(self.agent.memory.buffer, keep_last_n_words=500)
+        self.agent.memory.buffer = cut_dialogue_history(
+            self.agent.memory.buffer, keep_last_n_words=500
+        )
         res = self.agent({"input": text})
-        res['output'] = res['output'].replace("\\", "/")
-        response = re.sub('(image/\S*png)', lambda m: f'![](/file={m.group(0)})*{m.group(0)}*', res['output'])
+        res["output"] = res["output"].replace("\\", "/")
+        response = re.sub(
+            "(image/\S*png)",
+            lambda m: f"![](/file={m.group(0)})*{m.group(0)}*",
+            res["output"],
+        )
         state = state + [(text, response)]
-        print(f"\nProcessed run_text, Input text: {text}\nCurrent state: {state}\n"
-              f"Current Memory: {self.agent.memory.buffer}")
+        print(
+            f"\nProcessed run_text, Input text: {text}\nCurrent state: {state}\n"
+            f"Current Memory: {self.agent.memory.buffer}"
+        )
         return state, state
-    
+
     def run_image(self, image, state, txt):
-        image_filename = os.path.join('image', str(uuid.uuid4())[0:8] + ".png")
+        image_filename = os.path.join("image", str(uuid.uuid4())[0:8] + ".png")
         print("======>Auto Resize Image...")
         img = Image.open(image.name)
         width, height = img.size
@@ -118,71 +137,89 @@ class ConversationBot:
         width_new = int(np.round(width_new / 64.0)) * 64
         height_new = int(np.round(height_new / 64.0)) * 64
         img = img.resize((width_new, height_new))
-        img = img.convert('RGB')
+        img = img.convert("RGB")
         img.save(image_filename, "PNG")
         print(f"Resize image form {width}x{height} to {width_new}x{height_new}")
-        description = self.models['ImageCaptioning'].inference(image_filename)
-        Human_prompt = "\nHuman: provide a figure named {}. The description is: {}. " \
-                       "This information helps you to understand this image, " \
-                       "but you should use tools to finish following tasks, " \
-                       "rather than directly imagine from my description. If you understand, say \"Image file received\". \n".format(
-            image_filename, description)
+        description = self.models["ImageCaptioning"].inference(image_filename)
+        Human_prompt = (
+            "\nHuman: provide a figure named {}. The description is: {}. "
+            "This information helps you to understand this image, "
+            "but you should use tools to finish following tasks, "
+            'rather than directly imagine from my description. If you understand, say "Image file received". \n'.format(
+                image_filename, description
+            )
+        )
         AI_prompt = "Image file received.  "
-        self.agent.memory.buffer = self.agent.memory.buffer + Human_prompt + 'AI: ' + AI_prompt
+        self.agent.memory.buffer = (
+            self.agent.memory.buffer + Human_prompt + "AI: " + AI_prompt
+        )
         state = state + [(f"![](/file={image_filename})*{image_filename}*", AI_prompt)]
-        print(f"\nProcessed run_image, Input image: {image_filename}\nCurrent state: {state}\n"
-              f"Current Memory: {self.agent.memory.buffer}")
-        return state, state, txt + ' ' + image_filename + ' '
-    
-    def run_audio(self, audio, state, txt):
-        audio_filename = os.path.join('audio', str(uuid.uuid4())[0:8] + ".mp3")
-        shutil.copy(audio.name, audio_filename)
-        description = self.models['Whisper'].inference(audio_filename)
-        Human_prompt = "\nHuman: provide a audio recording named {}. The description is: {}. " \
-                       "This information helps you to understand this audio recording, " \
-                       "but you should use tools to finish following tasks, " \
-                       "rather than directly imagine from my description. If you understand, say \"Audio file received\". \n".format(
-            audio_filename, description)
-        AI_prompt = "Audio file received.  "
-        self.agent.memory.buffer = self.agent.memory.buffer + Human_prompt + 'AI: ' + AI_prompt
-        state = state + [(f"![](/file={audio_filename})*{audio_filename}*", AI_prompt)]
-        print(f"\nProcessed run_audio, Input audio: {audio_filename}\nCurrent state: {state}\n"
-              f"Current Memory: {self.agent.memory.buffer}")
-        return state, state, txt + ' ' + audio_filename + ' '
+        print(
+            f"\nProcessed run_image, Input image: {image_filename}\nCurrent state: {state}\n"
+            f"Current Memory: {self.agent.memory.buffer}"
+        )
+        return state, state, txt + " " + image_filename + " "
 
+    def run_audio(self, audio, state, txt):
+        audio_filename = os.path.join("audio", str(uuid.uuid4())[0:8] + ".mp3")
+        shutil.copy(audio.name, audio_filename)
+        description = self.models["Whisper"].inference(audio_filename)
+        Human_prompt = (
+            "\nHuman: provide a audio recording named {}. The description is: {}. "
+            "This information helps you to understand this audio recording, "
+            "but you should use tools to finish following tasks, "
+            'rather than directly imagine from my description. If you understand, say "Audio file received". \n'.format(
+                audio_filename, description
+            )
+        )
+        AI_prompt = "Audio file received.  "
+        self.agent.memory.buffer = (
+            self.agent.memory.buffer + Human_prompt + "AI: " + AI_prompt
+        )
+        state = state + [(f"![](/file={audio_filename})*{audio_filename}*", AI_prompt)]
+        print(
+            f"\nProcessed run_audio, Input audio: {audio_filename}\nCurrent state: {state}\n"
+            f"Current Memory: {self.agent.memory.buffer}"
+        )
+        return state, state, txt + " " + audio_filename + " "
 
     def run_video(self, video, state, txt):
         raise NotImplementedError
 
-
     def run_multimedia(self, file, state, txt):
-        print(f'Original path to the uploaded file is {file.name}')
+        print(f"Original path to the uploaded file is {file.name}")
         ext = os.path.splitext(file.name)[1]
-        if ext in ['.png', '.jpg', '.jpeg']:
+        if ext in [".png", ".jpg", ".jpeg"]:
             return self.run_image(file, state, txt)
-        elif ext in ['.mp3', '.wav', '.m4a']:
+        elif ext in [".mp3", ".wav", ".m4a"]:
             return self.run_audio(file, state, txt)
-        elif ext in ['mp4']:
+        elif ext in ["mp4"]:
             return self.run_video(file, state, txt)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--load', type=str, default="ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu")
+    parser.add_argument(
+        "--load", type=str, default="ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu"
+    )
     args = parser.parse_args()
-    load_dict = {e.split('_')[0].strip(): e.split('_')[1].strip() for e in args.load.split(',')}
+    load_dict = {
+        e.split("_")[0].strip(): e.split("_")[1].strip() for e in args.load.split(",")
+    }
     bot = ConversationBot(load_dict=load_dict)
     with gr.Blocks(css="#chatbot .gradio-container") as demo:
         chatbot = gr.Chatbot(elem_id="chatbot", label="Multimedia GPT")
         state = gr.State([])
         with gr.Row():
             with gr.Column(scale=0.7):
-                txt = gr.Textbox(show_label=False, placeholder="Enter text and press enter, or upload a file").style(
-                    container=False)
+                txt = gr.Textbox(
+                    show_label=False,
+                    placeholder="Enter text and press enter, or upload a file",
+                ).style(container=False)
             with gr.Column(scale=0.15, min_width=0):
                 clear = gr.Button("Clear")
             with gr.Column(scale=0.15, min_width=0):
-                btn = gr.UploadButton("Upload", file_types=["image", 'audio'])
+                btn = gr.UploadButton("Upload", file_types=["image", "audio"])
 
         txt.submit(bot.run_text, [txt, state], [chatbot, state])
         txt.submit(lambda: "", None, txt)
