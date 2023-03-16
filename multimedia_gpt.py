@@ -71,10 +71,10 @@ os.makedirs("video", exist_ok=True)
 class ConversationBot:
     def __init__(self, load_dict):
         # load_dict = {'VisualQuestionAnswering':'cuda:0', 'ImageCaptioning':'cuda:1', ...}
-        print(f"Initializing VisualChatGPT, load_dict={load_dict}")
+        print(f"Initializing Multimedia GPT, load_dict={load_dict}")
         if "ImageCaptioning" not in load_dict:
             raise ValueError(
-                "You have to load ImageCaptioning as a basic function for VisualChatGPT"
+                "You have to load ImageCaptioning as a basic function for Multimedia GPT"
             )
 
         self.llm = OpenAI(temperature=0, openai_api_key=openai.api_key)
@@ -200,7 +200,9 @@ class ConversationBot:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--load", type=str, default="ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu"
+        "--load",
+        type=str,
+        default="ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu",
     )
     args = parser.parse_args()
     load_dict = {

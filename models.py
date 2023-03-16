@@ -40,21 +40,11 @@ class DALLE:
         "The input to this tool should be a string, representing the text used to generate image. ",
     )
     def inference(self, inputs):
-        # image_path, instruct_text = inputs.split(",")[0], ','.join(inputs.split(',')[1:])
-        # image = Image.open(image_path)
         instruct_text = inputs
         prompt = instruct_text + ", " + self.a_prompt
-        # image = self.pipe(prompt, miage, num_inference_steps=20, eta=0.0, negative_prompt=self.n_prompt,
-        #                   guidance_scale=9.0).images[0]
-        # updated_image_path = get_new_image_name(image_path, func_name="line2image")
-        # image.save(updated_image_path)
-        # print(f"\nProcessed LineText2Image, Input Line: {image_path}, Input Text: {instruct_text}, "
-        #       f"Output Text: {updated_image_path}")
-
         response = openai.Image.create(prompt=prompt, n=1, size="1024x1024")
         image_url = response["data"][0]["url"]
         r = requests.get(image_url, stream=True)
-        # updated_image_path = get_new_image_name(image_path, func_name="dalle")
         updated_image_path = os.path.join("image", str(uuid.uuid4())[0:8] + ".png")
         if r.status_code == 200:
             with open(updated_image_path, "wb") as f:
@@ -66,10 +56,10 @@ class DALLE:
         return updated_image_path
 
 
-class DALLE_EDITING:
+class DALLEEDITING:
     def __init__(self, device):
-        print("Generating image using DALLE")
-        self.a_prompt = "best quality, extremely detailed"
+        print("Editing image using DALLE")
+        self.mask_former = MaskFormer(device=device)
 
     @prompts(
         name="Remove Something From The Photo",
@@ -91,21 +81,25 @@ class DALLE_EDITING:
     )
     def inference_replace(self, inputs):
         image_path, to_be_replaced_txt, replace_with_txt = inputs.split(",")
-        original_image = Image.open(image_path)
-        original_size = original_image.size
         mask_image = self.mask_former.inference(image_path, to_be_replaced_txt)
-        updated_image = self.inpaint(
+        response = openai.Image.create_edit(
+            image=open(image_path, "rb"),
+            mask=mask_image,
             prompt=replace_with_txt,
-            image=original_image.resize((512, 512)),
-            mask_image=mask_image.resize((512, 512)),
-        ).images[0]
-        updated_image_path = get_new_image_name(
-            image_path, func_name="replace-something"
+            n=1,
+            size="1024x1024",
         )
-        updated_image = updated_image.resize(original_size)
-        updated_image.save(updated_image_path)
+        updated_image_path = get_new_image_name(
+            image_path, func_name="replace-something-with-dalle"
+        )
+        image_url = response["data"][0]["url"]
+        r = requests.get(image_url, stream=True)
+        updated_image_path = os.path.join("image", str(uuid.uuid4())[0:8] + ".png")
+        if r.status_code == 200:
+            with open(updated_image_path, "wb") as f:
+                f.write(r.content)
         print(
-            f"\nProcessed ImageEditing, Input Image: {image_path}, Replace {to_be_replaced_txt} to {replace_with_txt}, "
+            f"\nProcessed ImageEditing with DALLE, Input Image: {image_path}, Replace {to_be_replaced_txt} to {replace_with_txt}, "
             f"Output Image: {updated_image_path}"
         )
         return updated_image_path
