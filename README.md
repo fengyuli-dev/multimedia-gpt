@@ -46,7 +46,12 @@ python multimedia_gpt.py --load ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu
 ```
 
 ## Plans
+### TODOs
 - [x] Support OpenAI Whisper for speech recognition
 - [x] Support OpenAI DALLE for image generation
-- [ ] Support OpenAI DALLE for image editing
+- [x] Support OpenAI DALLE for image editing
 - [ ] Deploy a GPU-free basic version for interactive demo
+- [ ] Add a command-line switch between ChatGPT and GPT-4 backends
+### Known Problems
+- [ ] DALLE only accepts square .png images — need a work-around
+- [ ] Diffusion pipeline is insanely slow on CPU-machines; need to consider this in deployment
