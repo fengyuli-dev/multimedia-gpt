@@ -1,13 +1,13 @@
 # Multimedia GPT
 
-Multimedia GPT connects your OpenAI GPT with vision and audio. You can now send images, videos (in development), and even audio recordings using your OpenAI API key, and get a response in both text and image formats. 
+Multimedia GPT connects your OpenAI GPT with vision and audio. You can now send images and audio recordings using your OpenAI API key, and get a response in both text and image formats. Right now, we are exploring ways to connect even more modalities of data, such as videos, PDFs, webpages, etc. All is made possible by a prompt manager inspired and built upon [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt).
 
-This project is made possible by a Prompt Manager and is inspired and built upon [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt). 
+This project is at its starting phase, and more features will be added soon. **Please consider :star: star us** if this idea is interesting to you!
 
 ## Models
 In addition to all of the vision foundation models mentioned in [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt), Multimedia GPT supports [OpenAI Whisper](https://openai.com/research/whisper), [OpenAI DALLE](https://openai.com/blog/dall-e-api-now-available-in-public-beta), and many more is under development! This means that **you no longer need your own GPUs for voice recognition and image generation** (although you still can!)
 
-The base chat model can be configured as **any OpenAI LLM**, including ChatGPT and GPT-4.
+The base chat model can be configured as **any OpenAI LLM**, including ChatGPT and GPT-4. We default to CharGPT `gpt-3.5-turbo`.
 
 ## Demo 
 In this demo, ChatGPT is fed with a recording of [a person telling the story of Cinderella](public/cinderella.mp3).
