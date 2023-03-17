@@ -33,16 +33,20 @@ echo "export OPENAI_API_KEY='yourkey'" >> ~/.zshrc
 # prepare your private OpenAI key (for Windows)
 setx OPENAI_API_KEY “<yourkey>”
 
-# Start Multimedia GPT !
-# You can specify the GPU/CPU assignment by "--load", the parameter indicates which 
-# foundation models to use and where it will be loaded to
-# The model and device are separated by underline '_', the different models are separated by comma ','
-# The available Visual Foundation Models can be found in the following table
-# For example, if you want to load ImageCaptioning to cpu and Text2Image to cuda:0
-# You can use: "ImageCaptioning_cpu,Text2Image_cuda:0"
+# Start Multimedia GPT!
+# You can specify the GPU/CPU assignment by "--load", the parameter indicates which foundation models to use and 
+# where it will be loaded to. The model and device are separated by '_', different models are separated by ','.
+# The available Visual Foundation Models can be found in models.py
+# For example, if you want to load ImageCaptioning to cuda:0 and whisper to cpu 
+# (whisper runs remotely, so it doesn't matter where it is loaded to)
+# You can use: "ImageCaptioning_cuda:0,Whisper_cpu"
 
-# Don't have GPUs? No worry, you can run DALLE and Whisper using your API key!
-python multimedia_gpt.py --load ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu                     
+# Don't have GPUs? No worry, you can run DALLE and Whisper on cloud using your API key!
+python multimedia_gpt.py --load ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu       
+
+# Additionally, you can configure the which OpenAI LLM to use by the "--llm" tag, such as 
+python multimedia_gpt.py --llm text-davinci-003  
+# The default is gpt-3.5-turbo (ChatGPT).  
 ```
 
 ## Plans
@@ -51,7 +55,7 @@ python multimedia_gpt.py --load ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu
 - [x] Support OpenAI DALLE for image generation
 - [x] Support OpenAI DALLE for image editing
 - [ ] Deploy a GPU-free basic version for interactive demo
-- [ ] Add a command-line switch between ChatGPT and GPT-4 backends
+- [x] Add a command-line switch between ChatGPT and GPT-4 backends
 ### Known Problems
 - [ ] DALLE only accepts square .png images — need a work-around
 - [ ] Diffusion pipeline is insanely slow on CPU-machines; need to consider this in deployment
