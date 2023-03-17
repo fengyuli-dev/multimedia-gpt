@@ -18,14 +18,14 @@ from utils import *
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
-# TODO: adapt this prompt template for video and audio
-PROMPT_PREFIX = """Multimedia GPT is designed to be able to assist with a wide range of text, visual, and audio related tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. Multimedia GPT is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
 
-Multimedia GPT is able to process and understand large amounts of text, images, videos, and audio recordings. As a language model, Multimedia GPT can not directly read images, videos, or audio recordings, but it has a list of tools to finish different visual / audio tasks. Each media will have a file name formed as "image/xxx.png", and Multimedia GPT can invoke different tools to indirectly understand pictures. When talking about images, Multimedia GPT is very strict to the file name and will never fabricate nonexistent files. When using tools to generate new image files, Multimedia GPT is also known that the image may not be the same as the user's demand, and will use other visual question answering tools or description tools to observe the real image. Multimedia GPT is able to use tools in a sequence, and is loyal to the tool observation outputs rather than faking the image content and image file name. It will remember to provide the file name from the last tool observation, if a new image is generated.
+PROMPT_PREFIX = """Multimedia GPT is designed to be able to assist with a wide range of documents, visual, and audio related tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. Multimedia GPT is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
 
-Human may provide new figures to Multimedia GPT with a description. The description helps Multimedia GPT to understand this image, but Multimedia GPT should use tools to finish following tasks, rather than directly imagine from the description.
+Multimedia GPT is able to process and understand large amounts of documents, images, videos, and audio recordings. As a language model, Multimedia GPT can not directly read images, videos, or audio recordings, but it has a list of tools to finish different visual / audio tasks. Each media will have a file name, and Multimedia GPT can invoke different tools to indirectly understand pictures. When talking about images, Multimedia GPT is very strict to the file name and will never fabricate nonexistent files. When using tools to generate new image files, Multimedia GPT is also known that the image may not be the same as the user's demand, and will use other visual question answering tools or description tools to observe the real image. Multimedia GPT is able to use tools in a sequence, and is loyal to the tool observation outputs rather than faking the content and the file name. It will remember to provide the file name from the last tool observation, if a new file is generated.
 
-Overall, Multimedia GPT is a powerful visual dialogue assistant tool that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. 
+Human may provide new images, audio recordings, videos, or other to Multimedia GPT with a description. The description helps Multimedia GPT to understand this file, but Multimedia GPT should use tools to finish following tasks, rather than directly imagine from the description.
+
+Overall, Multimedia GPT is a powerful tool that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. 
 
 
 TOOLS:
@@ -185,6 +185,9 @@ class ConversationBot:
 
     def run_video(self, video, state, txt):
         raise NotImplementedError
+    
+    def run_pdf(self, video, state, txt):
+        raise NotImplementedError
 
     def run_multimedia(self, file, state, txt):
         print(f"Original path to the uploaded file is {file.name}")
@@ -195,6 +198,8 @@ class ConversationBot:
             return self.run_audio(file, state, txt)
         elif ext in ["mp4"]:
             return self.run_video(file, state, txt)
+        elif ext in [".pdf"]:
+            return self.run_pdf(file, state, txt)
 
 
 if __name__ == "__main__":
@@ -223,7 +228,7 @@ if __name__ == "__main__":
             with gr.Column(scale=0.15, min_width=0):
                 clear = gr.Button("Clear")
             with gr.Column(scale=0.15, min_width=0):
-                btn = gr.UploadButton("Upload", file_types=["image", "audio"])
+                btn = gr.UploadButton("Upload", file_types=["file"])
 
         txt.submit(bot.run_text, [txt, state], [chatbot, state])
         txt.submit(lambda: "", None, txt)

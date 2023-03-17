@@ -28,7 +28,7 @@ conda create -n multimedia-gpt python=3.8
 conda activate multimedia-gptt
 pip install -r requirements.txt
 
-# prepare your private OpenAI key (for Linux)
+# prepare your private OpenAI key (for Linux / MacOS)
 echo "export OPENAI_API_KEY='yourkey'" >> ~/.zshrc
 # prepare your private OpenAI key (for Windows)
 setx OPENAI_API_KEY “<yourkey>”
