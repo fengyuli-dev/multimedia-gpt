@@ -51,11 +51,12 @@ python multimedia_gpt.py --llm text-davinci-003
 
 ## Plans
 ### TODOs
-- [x] Support OpenAI Whisper for speech recognition
-- [x] Support OpenAI DALLE for image generation
+- [x] Support OpenAI Whisper for speech recognition, added to the default config
+- [x] Support OpenAI DALLE for image generation, added to the default config
 - [x] Support OpenAI DALLE for image editing
-- [ ] Deploy a GPU-free basic version for interactive demo
 - [x] Add a command-line switch between ChatGPT and GPT-4 backends
+- [ ] Deploy a GPU-free basic version for interactive demo
+- [ ] Suppose an open-source LLM, such as LLaMa, to allow the system run completely locally
 ### Known Problems
 - [ ] DALLE only accepts square .png images — need a work-around
 - [ ] Diffusion pipeline is insanely slow on CPU-machines; need to consider this in deployment
