@@ -1,6 +1,6 @@
 # Multimedia GPT
 
-Multimedia GPT connects your OpenAI GPT with vision and audio. You can now send images, videos (in development), and even audio recordings using your OpenAI API key, and get a response in both text and image formats. 
+Multimedia GPT connects your OpenAI GPT with vision and audio. You can now send images and audio recordings using your OpenAI API key, and get a response in both text and image formats. Right now, we are exploring ways to connect even more modalities of data, such as videos, PDFs, webpages, etc.
 
 Multimedia GPT is made possible by a Prompt Manager inspired and built upon [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt).
 
