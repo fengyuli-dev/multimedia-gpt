@@ -69,7 +69,7 @@ os.makedirs("video", exist_ok=True)
 
 
 class ConversationBot:
-    def __init__(self, load_dict):
+    def __init__(self, load_dict, llm):
         # load_dict = {'VisualQuestionAnswering':'cuda:0', 'ImageCaptioning':'cuda:1', ...}
         print(f"Initializing Multimedia GPT, load_dict={load_dict}")
         if "ImageCaptioning" not in load_dict:
@@ -77,7 +77,7 @@ class ConversationBot:
                 "You have to load ImageCaptioning as a basic function for Multimedia GPT"
             )
 
-        self.llm = OpenAI(temperature=0, openai_api_key=openai.api_key)
+        self.llm = OpenAI(model_name=llm, temperature=0, openai_api_key=openai.api_key)
         self.memory = ConversationBufferMemory(
             memory_key="chat_history", output_key="output"
         )
@@ -204,11 +204,13 @@ if __name__ == "__main__":
         type=str,
         default="ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu",
     )
+    parser.add_argument("--llm", type=str, default="gpt-3.5-turbo")
     args = parser.parse_args()
+    llm = parser.llm.strip()
     load_dict = {
         e.split("_")[0].strip(): e.split("_")[1].strip() for e in args.load.split(",")
     }
-    bot = ConversationBot(load_dict=load_dict)
+    bot = ConversationBot(load_dict=load_dict, llm=llm)
     with gr.Blocks(css="#chatbot .gradio-container") as demo:
         chatbot = gr.Chatbot(elem_id="chatbot", label="Multimedia GPT")
         state = gr.State([])
