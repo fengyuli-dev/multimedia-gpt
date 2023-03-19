@@ -209,7 +209,7 @@ if __name__ == "__main__":
         type=str,
         default="ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu",
     )
-    parser.add_argument("--llm", type=str, default="text-davinci-003")
+    parser.add_argument("--llm", type=str, default="text-davinci-003", choices=["text-davinci-003", "gpt-3.5-turbo", "gpt-4"])
     args = parser.parse_args()
     llm = parser.llm.strip()
     load_dict = {

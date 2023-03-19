@@ -12,7 +12,7 @@ The base chat model can be configured as **any OpenAI LLM**, including ChatGPT a
 ## Demo 
 In this demo, ChatGPT is fed with a recording of [a person telling the story of Cinderella](public/cinderella.mp3).
 
-![](./public/demo-1.jpg)
+![](./public/demo-1.png)
 ![](./public/demo-2.jpg)
 
 
@@ -56,7 +56,6 @@ python multimedia_gpt.py --llm text-davinci-003
 - [x] Support OpenAI DALLE for image editing
 - [x] Add a command-line switch between ChatGPT and GPT-4 backends
 - [ ] Deploy a GPU-free basic version for interactive demo
-- [ ] Suppose an open-source LLM, such as LLaMa, to allow the system run completely locally
 ### Known Problems
 - [ ] DALLE only accepts square .png images — need a work-around
 - [ ] Diffusion pipeline is insanely slow on CPU-machines; need to consider this in deployment

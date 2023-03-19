@@ -82,6 +82,10 @@ class DALLEEDITING:
     def inference_replace(self, inputs):
         image_path, to_be_replaced_txt, replace_with_txt = inputs.split(",")
         mask_image = self.mask_former.inference(image_path, to_be_replaced_txt)
+        assert image_path.endswith(".png"), "DALLE accepts only png images."
+        with Image.open(image_path) as image:
+            width, height = image.size
+            assert width == height, "DALLE accepts only square images."
         response = openai.Image.create_edit(
             image=open(image_path, "rb"),
             mask=mask_image,
