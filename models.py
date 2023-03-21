@@ -42,9 +42,9 @@ class PDFReader:
         self.index = GPTSimpleVectorIndex(pdf_doc)
 
     @prompts(
-        name="Read PDF",
-        description="useful when you want to read a pdf file. receives pdf_path as input. "
-        "The input to this tool should be a string, representing the pdf_path. ",
+        name="Answer qusetion based on PDF",
+        description="useful when you want to read the content of a pdf using the PDFReader and then answer a question the user gives. receives the user's question as input. "
+        "The input to this tool should be a string, representing the user's question / query. ",
     )
     def inference(self, inputs):
         query = inputs

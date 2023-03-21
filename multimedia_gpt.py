@@ -190,11 +190,29 @@ class ConversationBot:
 
     def run_pdf(self, pdf, state, txt):
         pdf_path = pdf.name
-        PDFReader = globals()['PDFReader'](device='cpu')
+        pdf_filename = os.path.join("audio", str(uuid.uuid4())[0:8] + ".pdf")
+        shutil.copy(pdf_path, pdf_filename)
+        PDFReader = globals()["PDFReader"](device="cpu")
         PDFReader.init_index(pdf_path)
-        # pass
-        
-
+        Human_prompt = (
+            "\nHuman: provide a pdf document named {}. The description is stored as an index in your PDFReader. "
+            "You can find the content of the pdf document by using the tool PDFReader later"
+            "This information helps you to understand this pdf document, "
+            "but you should use tools to finish following tasks, "
+            'rather than directly imagine from my description. If you understand, say "PDF file received". \n'.format(
+                pdf_filename
+            )
+        )
+        AI_prompt = "PDF file received."
+        self.agent.memory.buffer = (
+            self.agent.memory.buffer + Human_prompt + "AI: " + AI_prompt
+        )
+        state = state + [(f"![](/file={pdf_filename})*{pdf_filename}*", AI_prompt)]
+        print(
+            f"\nProcessed run_pdf, Input pdf: {pdf_filename}\nCurrent state: {state}\n"
+            f"Current Memory: {self.agent.memory.buffer}"
+        )
+        return state, state, txt + " " + pdf_filename + " "
 
     def run_multimedia(self, file, state, txt):
         print(f"Original path to the uploaded file is {file.name}")
