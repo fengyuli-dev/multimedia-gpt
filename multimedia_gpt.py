@@ -11,12 +11,15 @@ from langchain.agents.initialize import initialize_agent
 from langchain.agents.tools import Tool
 from langchain.chains.conversation.memory import ConversationBufferMemory
 from langchain.llms.openai import OpenAI
+from llama_index import download_loader
 from PIL import Image
 
 from models import *
 from utils import *
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
+
+pdf_loader = download_loader("PDFReader")
 
 
 PROMPT_PREFIX = """Multimedia GPT is designed to be able to assist with a wide range of documents, visual, and audio related tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. Multimedia GPT is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
@@ -185,7 +188,7 @@ class ConversationBot:
 
     def run_video(self, video, state, txt):
         raise NotImplementedError
-    
+
     def run_pdf(self, video, state, txt):
         raise NotImplementedError
 
@@ -209,7 +212,12 @@ if __name__ == "__main__":
         type=str,
         default="ImageCaptioning_cpu,DALLE_cpu,Whisper_cpu",
     )
-    parser.add_argument("--llm", type=str, default="text-davinci-003", choices=["text-davinci-003", "gpt-3.5-turbo", "gpt-4"])
+    parser.add_argument(
+        "--llm",
+        type=str,
+        default="text-davinci-003",
+        choices=["text-davinci-003", "gpt-3.5-turbo", "gpt-4"],
+    )
     args = parser.parse_args()
     llm = args.llm.strip()
     load_dict = {
