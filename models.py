@@ -14,7 +14,7 @@ from diffusers import (
     StableDiffusionPipeline,
     UniPCMultistepScheduler,
 )
-from llama_index import download_loader
+from llama_index import download_loader, GPTSimpleVectorIndex
 from PIL import Image
 from transformers import (
     AutoImageProcessor,
@@ -33,15 +33,22 @@ from utils import *
 class PDFReader:
     def __init__(self, device):
         print("Initializing PDFReader to %s" % device)
+        self.index = None
+        pdf_loader_class = download_loader("PDFReader")
+        self.pdf_loader = pdf_loader_class()
 
+    def init_index(self, pdf_path):
+        pdf_doc = self.pdf_loader.load_data(file=pdf_path)
+        self.index = GPTSimpleVectorIndex(pdf_doc)
 
     @prompts(
         name="Read PDF",
         description="useful when you want to read a pdf file. receives pdf_path as input. "
         "The input to this tool should be a string, representing the pdf_path. ",
     )
-    def inference(self, q):
-        
+    def inference(self, inputs):
+        query = inputs
+        return self.index.query(query)
 
 
 class DALLE:
@@ -102,8 +109,8 @@ class DALLEEDITING:
         with Image.open(image_path) as image:
             width, height = image.size
             if width != height:
-                warnings.warn('Image is not square. DALLE requires square images.')
-            image = image.convert('RGBA')
+                warnings.warn("Image is not square. DALLE requires square images.")
+            image = image.convert("RGBA")
             image = image.resize((1024, 1024), Image.ANTIALIAS)
             image.save(image_path)
         response = openai.Image.create_edit(
