@@ -1,14 +1,16 @@
 # Multimedia GPT
 
-Multimedia GPT connects your OpenAI GPT with vision and audio. You can now send images and audio recordings using your OpenAI API key, and get a response in both text and image formats. Right now, we are exploring ways to connect even more modalities of data, such as videos, PDFs, webpages, etc. All is made possible by a prompt manager inspired and built upon [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt).
+Multimedia GPT connects your OpenAI GPT with vision and audio. You can now send images and audio recordings using your OpenAI API key, and get a response in both text and image formats. We are currently adding support for PDFs and videos. All is made possible by a prompt manager inspired and built upon [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt).
 
 ## Support Us
 This project is under active development, and more features will be added soon. **Please consider :star: star us** or follow the [author](https://github.com/fengyuli-dev) if this idea is interesting to you. We thank all our [supporters](#supporters)!
 
 ## Models
-In addition to all of the vision foundation models mentioned in [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt), Multimedia GPT supports [OpenAI Whisper](https://openai.com/research/whisper), [OpenAI DALLE](https://openai.com/blog/dall-e-api-now-available-in-public-beta), and many more is under development! This means that **you no longer need your own GPUs for voice recognition and image generation** (although you still can!)
+In addition to all of the vision foundation models mentioned in [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt), Multimedia GPT supports [OpenAI Whisper](https://openai.com/research/whisper) and [OpenAI DALLE](https://openai.com/blog/dall-e-api-now-available-in-public-beta)! This means that **you no longer need your own GPUs for voice recognition and image generation** (although you still can!)
 
-The base chat model can be configured as **any OpenAI LLM**, including ChatGPT and GPT-4. We default to CharGPT `gpt-3.5-turbo`.
+The base chat model can be configured as **any OpenAI LLM**, including ChatGPT and GPT-4. We default to ChatGPT `gpt-3.5-turbo`.
+
+You are welcome to fork this project and add models that's suitable for your own use case. A simple way to do this is through [llama_index](https://github.com/jerryjliu/llama_index). You will have to create a new class for your model in `model.py`, and add a runner method `run_<model_name>` in `multimedia_gpt.py`. See `run_pdf` for an example.
 
 ## Demo 
 In this demo, ChatGPT is fed with a recording of [a person telling the story of Cinderella](public/cinderella.mp3).
@@ -58,8 +60,9 @@ python multimedia_gpt.py --llm text-davinci-003
 - [x] Add a command-line switch between ChatGPT and GPT-4 backends
 - [ ] Deploy a GPU-free basic version for interactive demo
 ### Known Problems
-- [ ] DALLE only accepts square .png images — need a work-around
+- [x] DALLE only accepts square .png images — need a work-around
 - [ ] Diffusion pipeline is insanely slow on CPU-machines; need to consider this in deployment
+- [ ] PDFReader (from llama_index) requires a higher version of langchain, which isn't compatible with the majority of other code. Blocked.
 
 ## Supporters
 [![Stargazers repo roster for @fengyuli-dev/multimedia-gpt](https://reporoster.com/stars/dark/fengyuli-dev/multimedia-gpt)](https://github.com/fengyuli-dev/multimedia-gpt/stargazers)
