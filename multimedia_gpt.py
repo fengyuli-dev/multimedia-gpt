@@ -19,7 +19,8 @@ from utils import *
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
-pdf_loader = download_loader("PDFReader")
+pdf_loader_class = download_loader("PDFReader")
+pdf_loader = pdf_loader_class()
 
 
 PROMPT_PREFIX = """Multimedia GPT is designed to be able to assist with a wide range of documents, visual, and audio related tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. Multimedia GPT is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
@@ -133,7 +134,8 @@ class ConversationBot:
     def run_image(self, image, state, txt):
         image_filename = os.path.join("image", str(uuid.uuid4())[0:8] + ".png")
         print("======>Auto Resize Image...")
-        img = Image.open(image.name)
+        image_path = image.name
+        img = Image.open(image_path)
         width, height = img.size
         ratio = min(512 / width, 512 / height)
         width_new, height_new = (round(width * ratio), round(height * ratio))
@@ -165,7 +167,8 @@ class ConversationBot:
 
     def run_audio(self, audio, state, txt):
         audio_filename = os.path.join("audio", str(uuid.uuid4())[0:8] + ".mp3")
-        shutil.copy(audio.name, audio_filename)
+        audio_path = audio.name
+        shutil.copy(audio_path, audio_filename)
         description = self.models["Whisper"].inference(audio_filename)
         Human_prompt = (
             "\nHuman: provide a audio recording named {}. The description is: {}. "
@@ -189,8 +192,10 @@ class ConversationBot:
     def run_video(self, video, state, txt):
         raise NotImplementedError
 
-    def run_pdf(self, video, state, txt):
-        raise NotImplementedError
+    def run_pdf(self, pdf, state, txt):
+        pdf_path = pdf.name
+        pdf_doc = pdf_loader.load_data(file=pdf_path)
+        
 
     def run_multimedia(self, file, state, txt):
         print(f"Original path to the uploaded file is {file.name}")

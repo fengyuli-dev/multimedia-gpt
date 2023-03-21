@@ -14,6 +14,7 @@ from diffusers import (
     StableDiffusionPipeline,
     UniPCMultistepScheduler,
 )
+from llama_index import download_loader
 from PIL import Image
 from transformers import (
     AutoImageProcessor,
@@ -27,6 +28,20 @@ from transformers import (
 )
 
 from utils import *
+
+
+class PDFReader:
+    def __init__(self, device):
+        print("Initializing PDFReader to %s" % device)
+
+
+    @prompts(
+        name="Read PDF",
+        description="useful when you want to read a pdf file. receives pdf_path as input. "
+        "The input to this tool should be a string, representing the pdf_path. ",
+    )
+    def inference(self, q):
+        
 
 
 class DALLE:
