@@ -1,5 +1,6 @@
 import cv2
 import requests
+import warnings
 import openai
 from scipy.constants import R
 import torch
@@ -85,7 +86,11 @@ class DALLEEDITING:
         assert image_path.endswith(".png"), "DALLE accepts only png images."
         with Image.open(image_path) as image:
             width, height = image.size
-            assert width == height, "DALLE accepts only square images."
+            if width != height:
+                warnings.warn('Image is not square. DALLE requires square images.')
+            image = image.convert('RGBA')
+            image = image.resize((1024, 1024), Image.ANTIALIAS)
+            image.save(image_path)
         response = openai.Image.create_edit(
             image=open(image_path, "rb"),
             mask=mask_image,

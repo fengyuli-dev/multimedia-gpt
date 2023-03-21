@@ -211,7 +211,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("--llm", type=str, default="text-davinci-003", choices=["text-davinci-003", "gpt-3.5-turbo", "gpt-4"])
     args = parser.parse_args()
-    llm = parser.llm.strip()
+    llm = args.llm.strip()
     load_dict = {
         e.split("_")[0].strip(): e.split("_")[1].strip() for e in args.load.split(",")
     }
@@ -236,4 +236,4 @@ if __name__ == "__main__":
         clear.click(bot.memory.clear)
         clear.click(lambda: [], None, chatbot)
         clear.click(lambda: [], None, state)
-        demo.launch(server_name="0.0.0.0", server_port=5050)
+        demo.launch(inbrowser=True, server_name="0.0.0.0", server_port=5050)
