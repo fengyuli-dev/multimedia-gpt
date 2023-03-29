@@ -8,7 +8,7 @@ This project is under active development, and more features will be added soon. 
 ## Models
 In addition to all of the vision foundation models mentioned in [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt), Multimedia GPT supports [OpenAI Whisper](https://openai.com/research/whisper) and [OpenAI DALLE](https://openai.com/blog/dall-e-api-now-available-in-public-beta)! This means that **you no longer need your own GPUs for voice recognition and image generation** (although you still can!)
 
-The base chat model can be configured as **any OpenAI LLM**, including ChatGPT and GPT-4. We default to ChatGPT `gpt-3.5-turbo`.
+The base chat model can be configured as **any OpenAI LLM**, including ChatGPT and GPT-4. We default to `text-davinci-003`.
 
 You are welcome to fork this project and add models that's suitable for your own use case. A simple way to do this is through [llama_index](https://github.com/jerryjliu/llama_index). You will have to create a new class for your model in `model.py`, and add a runner method `run_<model_name>` in `multimedia_gpt.py`. See `run_pdf` for an example.
 
@@ -60,7 +60,7 @@ This project is an experimental work and will not be deployed to a production en
 - [x] Support OpenAI DALLE for image editing
 - [x] Add a command-line switch between ChatGPT and GPT-4 backends
 - [ ] Implement a function that extract key frames from a video
-- [ ] Deploy a GPU-free basic version for interactive demo
+  
 ### Known Problems
 - [x] DALLE only accepts square .png images — need a work-around
 - [ ] PDFReader (from llama_index) requires a higher version of langchain, which isn't compatible with the majority of other code. Blocked.
