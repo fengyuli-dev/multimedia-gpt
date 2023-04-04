@@ -1,9 +1,11 @@
+**This repository is currently frozon as Multimedia GPT is integrated as part of an exiciting new project, which is under active development right now.** We hope to announce it in a couple months.
+
 # Multimedia GPT
 
 Multimedia GPT connects your OpenAI GPT with vision and audio. You can now send images, audio recordings, and pdf documents using your OpenAI API key, and get a response in both text and image formats. We are currently adding support for videos. All is made possible by a prompt manager inspired and built upon [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt).
 
-## Support Us
-This project is under active development, and more features will be added soon. **Please consider :star: star us** or follow the [author](https://github.com/fengyuli-dev) if this idea is interesting to you. We thank all our [supporters](#supporters)!
+<!-- ## Support Us
+This project is under active development, and more features will be added soon. **Please consider :star: star us** or follow the [author](https://github.com/fengyuli-dev) if this idea is interesting to you. We thank all our [supporters](#supporters)! -->
 
 ## Models
 In addition to all of the vision foundation models mentioned in [Microsoft Visual ChatGPT](https://github.com/microsoft/visual-chatgpt), Multimedia GPT supports [OpenAI Whisper](https://openai.com/research/whisper) and [OpenAI DALLE](https://openai.com/blog/dall-e-api-now-available-in-public-beta)! This means that **you no longer need your own GPUs for voice recognition and image generation** (although you still can!)
@@ -59,11 +61,11 @@ This project is an experimental work and will not be deployed to a production en
 - [x] Support OpenAI DALLE for image generation, added to the default config
 - [x] Support OpenAI DALLE for image editing
 - [x] Add a command-line switch between ChatGPT and GPT-4 backends
-- [ ] Implement a function that extract key frames from a video
+- [x] Implement a function that extract key frames from a video
   
 ### Known Problems
 - [x] DALLE only accepts square .png images — need a work-around
-- [ ] PDFReader (from llama_index) requires a higher version of langchain, which isn't compatible with the majority of other code. Blocked.
+- [ ] PDFReader (from llama_index) requires a higher version of langchain, which isn't compatible with how visual chatGPT is implemented
 
 ## Supporters
 [![Stargazers repo roster for @fengyuli-dev/multimedia-gpt](https://reporoster.com/stars/dark/fengyuli-dev/multimedia-gpt)](https://github.com/fengyuli-dev/multimedia-gpt/stargazers)
