@@ -1,4 +1,6 @@
-**This repository is currently frozon as Multimedia GPT is integrated as part of an exiciting new project, which is under active development right now.** We hope to announce it in a couple months.
+**This repository is not actively maintained as there are recent corporate projects that share our vision, such as [TaskMatrix](https://github.com/microsoft/TaskMatrix), [AutoGPT](https://github.com/Significant-Gravitas/Auto-GPT), and [HuggingGPT](https://github.com/microsoft/JARVIS), that benefit from larger team effort and better management.** Multimedia GPT is integrated as part of an exiciting ongoing research, which hopefully will be announced in a few months.
+
+-------
 
 # Multimedia GPT
 
