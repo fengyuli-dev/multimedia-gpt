@@ -1,7 +1,7 @@
 controlnet_aux
 diffusers
 gradio
-langchain==0.0.101
+langchain==0.0.236
 llama_index
 numpy
 openai
